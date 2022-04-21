@@ -69,16 +69,23 @@
         ```
         
         - ou em alguns casos+ em apresentação de texto
-            - (ele basicamente ignora o echo)
-        
-        ```php
-        <html>
-        	<body>
-        		<?= escrita ?>
-        	</body>
-        </html>
-        ```
-        
+            
+            ```php
+            <?= escrita ?>
+            ```
+            
+            - podendo ser apresentado dentro de um html, como por exemplo
+            
+            ```php
+            <html>
+            	<body>
+            		<div class=<?= escrita ?>>
+            		</div>
+            		</div>
+            	</body>
+            </html>
+            ```
+            
 
 ---
 
@@ -380,7 +387,7 @@
             </html>
             ```
             
-            - ou seja, “” é um pouco mais lento, pois ele sempre irá conferir se há variáveis dentro de si, então caso não precise usar variáveis use a ‘’
+            - ou seja, “” é um pouco mais lento, pois ele sempre irá conferir se há variáveis dentro de si, então caso não precise usar variáveis use a ‘ ’
     
     ---
     
