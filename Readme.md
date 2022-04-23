@@ -1380,6 +1380,73 @@
 
 ---
 
+- False, Null, Empty
+    
+    
+    | false | true/false | boolean / vazio |
+    | --- | --- | --- |
+    | null | valor especial | null / valor vazio  |
+    | empty | valor especial | valor vazio |
+    - False
+        
+        ```php
+        <?php
+        
+            $funcionario3 = false;
+        
+            if(empty($funcionario3)){
+                echo 'Sim a variavel está vazia';
+            }else {
+                echo 'Nao a variavel nn está vazia';
+            }
+        
+        ?>
+        ```
+        
+    - Null
+        
+        ```php
+        <?php
+            
+            $funcionario2 = ''; //nao null
+        
+            if(is_null($funcionario2)){
+                echo 'Sim a variavel é null';
+            }else {
+                echo 'Nao a variavel nn é null';
+            }
+        
+        ?>
+        ```
+        
+    - Empty
+        
+        ```php
+        <?php
+            
+            $funcionario1 = null; // vazio
+            $funcionario2 = ''; // vazio
+        
+            if(empty($funcionario1)){
+                echo 'Sim a variavel está vazia';
+            }else {
+                echo 'Nao a variavel nn está vazia';
+            }
+        
+            echo'<br>';
+        
+            if(empty($funcionario2)){
+                echo 'Sim a variavel está vazia';
+            }else {
+                echo 'Nao a variavel nn está vazia';
+            }
+        
+        ?>
+        ```
+        
+
+---
+
 - Array
     - Array básico
         - São basicamente variáveis que nos permitem relacionar itens associados a indices
@@ -1533,3 +1600,244 @@
                 echo $lista_coisas['pessoas'][2];
             ?>
             ```
+            
+    
+    ---
+    
+    - Pesquisa interna
+        - Existem dois comandos nativos do PHP
+            - in_array()
+                - Ele retorna true ou false para o requerimento
+                - Sintaxe
+                    
+                    ```php
+                    in_array('nome_do_elemento', $variavel_array);
+                    ```
+                    
+                - Exemplo
+                    
+                    ```php
+                    <?php
+                        $lista_frutas = ['Banana', 'Maçã', 'Morango', 'Uva'];
+                        
+                        echo '<pre>';
+                    	    print_r($lista_frutas);
+                        echo '</pre>';
+                    
+                        $existe = in_array('slamano', $lista_frutas);
+                        //verifica se existe oq é pedido
+                        //true => 1
+                        //false => vazio
+                        if($existe) {
+                            echo 'O valor pesquisado existe';
+                        }else {
+                            echo 'O valor pesquisado não existe';
+                        }
+                    ?>
+                    ```
+                    
+            
+            ---
+            
+            - array_serach()
+                - Retorna o indece do valor pesquisado CASO ELE EXISTA
+                - Sintaxe
+                    
+                    ```php
+                    array_search('nome_do_elemento', $variavel_array);
+                    ```
+                    
+                - Exemplo
+                    
+                    ```php
+                    <?php
+                        
+                        $lista_frutas = ['Banana', 'Maçã', 'Morango', 'Uva'];
+                        
+                        echo '<pre>';
+                        print_r($lista_frutas);
+                        echo '</pre>';
+                    
+                        $existe = array_search('Uva', $lista_frutas);
+                        //verifica se existe oq é pedido
+                        //caso exista => valor do indice
+                        //caso não => null => texto vazio
+                    
+                        if($existe != null) {
+                            echo 'O valor pesquisado existe';
+                        }else {
+                            echo 'O valor pesquisado não existe';
+                        }
+                        
+                    
+                    ?>
+                    ```
+                    
+            
+            ---
+            
+            - Pesquisa em array multidimencional
+                - Sintaxe
+                    
+                    ```php
+                    in_array('nome_elemento', $array_multi[indice_do_array_requerido])
+                    ```
+                    
+                - Exemplo
+                    
+                    ```php
+                    <?php
+                        $lista_frutas = ['Banana', 'Maçã', 'Morango', 'Uva'];
+                        $lista_coisas = [
+                            'frutas' => $lista_frutas,
+                            'pessoas' => ['João', 'Maria']
+                        ];
+                    
+                        echo '<pre>';
+                        print_r($lista_frutas);
+                        echo '</pre>';
+                    
+                        echo in_array('Uva', $lista_coisas['frutas']);
+                        echo '<br>';
+                        echo array_search('Uva', $lista_coisas['frutas']);
+                    ?>
+                    ```
+                    
+    
+    ---
+    
+    - Funções array
+        
+        
+        | is_array(array) | verifica se é um array |  |
+        | --- | --- | --- |
+        | array_keys(array) | retorna todas as chaves de um array |  |
+        | sort(array) | ordena um array e reajusta seus indices |  |
+        | asort(array) | ordena  um array preservando os indices |  |
+        | count(array) | conta a quantidade de elementos de um array |  |
+        | array_merge(array) | funde um ou mais arrays | array_merge($array1, $array2) |
+        | explode(array) | divide uma string baseada em um delimitador | $string = ‘26/04/2018’);
+        explode(’/’, $string); |
+        | implode(array) | junta elementos de um array em uma string | $array = [’a’, ‘b’, ‘x’, ‘y’];
+        implode(’,’, $array); |
+
+---
+
+- While
+    - Sintaxe
+        
+        ```php
+        while (condicao) {
+        	operacao
+        }
+        ```
+        
+    - Exemplo comum
+        
+        ```php
+        <?php
+            $num = 1;
+            while ($num <10){
+        	    echo "$num <br>";
+              $num++;
+            } 
+        ?>
+        ```
+        
+    - Exemplo com break
+        - interrompe completamente o while, pulando pra próxima operação
+        
+        ```php
+        <?php
+            $num = 1;
+            while (true){
+        	    echo "$num <br>";
+        	    $num++;
+        	    if($num > 100){
+        	        break;
+        	    }
+        		} 
+        ?>
+        ```
+        
+    - Exemplo com continue
+        - ele pula pro início do mesmo while ignorando o resto do conteúdo desse while
+        
+        ```php
+        <?php
+            $num = 1;
+        
+            while ($num < 10){
+            $num++;
+            if($num == 2 OR $num == 6){
+                continue;    
+            }
+            echo "$num <br>";
+        } 
+        ?>
+        ```
+        
+
+---
+
+- Do while
+    - Ele sempre vai ser executado no mínimo uma vez, pois a condição do loop será verificada DEPOIS da execução
+    - Sintaxe
+        
+        ```php
+        do {
+        
+        }while(condicao);
+        ```
+        
+    - Exemplo
+        
+        ```php
+        <?php
+            $x = 0;
+            do {
+                $x++;
+                if($x % 2 == 0){
+                    continue;
+                }
+                echo "$x <br>";
+        
+            }while($x < 20);
+        ?>
+        ```
+        
+
+---
+
+- For
+    - Sintaxe
+        
+        ```php
+        for (variavel; condicao; incremento){
+        	operacao
+        }
+        ```
+        
+    - Exemplo
+        
+        ```php
+        <?php
+            for($x = 1; $x <= 10; $x++) {
+                echo "$x <br>";
+            }
+        ?>
+        ```
+        
+        ```php
+        <?php
+            for($x = 1; true ; $x++) {
+                if($x >= 20){
+                    break;
+                }
+                echo "$x <br>";
+            }
+        ?>
+        ```
+        
+
+---
