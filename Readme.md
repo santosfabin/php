@@ -10,6 +10,8 @@
         - HYPER TEXTO
     - HTTP
         - Hypertext Transfer Protocol
+    - Paradigma é um padrão uma conduta, uma forma de fazer alguma coisa
+        - o PHP suporta tanto o paradigma procedural quanto o paradigma de orientação a objeto
 
 ---
 
@@ -24,6 +26,17 @@
         - MySQL
         - PHP
         - phpMyAdmin
+
+---
+
+- ?.php
+    - Para ver qual script será executado para início de página basta:
+        - Clique em Config na parte do Apache
+        - e procure ou use o Ctrl + f para buscar por “DirectoryIndex”
+        - lá terá uma lista de preferência em ordem sobre qual arquivo ele irá procurar, caso não seja especificado
+    - Lá você pode mudar/adicionar prioridades
+        - por exemplo, você pode adicionar um script principal para iniciar
+        
 
 ---
 
@@ -1221,6 +1234,15 @@
         ?>
         ```
         
+    - —F
+        
+        ```php
+        $titulo = str_replace('#', '-', $_POST['titulo']);
+        $categoria = str_replace('#', '-', $_POST['categoria']);
+        $descricao = str_replace('#', '-', $_POST['descricao']);
+        echo $texto = $titulo . '#' . $categoria . '#' . $descricao;
+        ```
+        
 
 ---
 
@@ -1720,6 +1742,12 @@
         explode(’/’, $string); |
         | implode(array) | junta elementos de um array em uma string | $array = [’a’, ‘b’, ‘x’, ‘y’];
         implode(’,’, $array); |
+        - —F
+            
+            ```php
+            echo implode('#', str_replace('#', '-', $_POST));
+            ```
+            
 
 ---
 
@@ -1841,3 +1869,776 @@
         
 
 ---
+
+- Foreache
+    - Sintaxe para os elementos do array
+        
+        ```php
+        foreach($array as $elemento) {
+        }
+        ```
+        
+        - ou seja, ele inicia por um array, e o item recebe um item em sequencia do array, então cada vez ele será o próximo item do array
+        - Exemplo
+            
+            ```php
+            <?php
+                $itens = ['sofá', 'mesa', 'cadeira', 'fogão', 'geladeira'];
+            
+                echo '<pre>';
+                print_r ($itens);
+                echo '</pre>';
+            
+                foreach($itens as $item){
+                    echo "$item <br.>";
+                }
+            ?>
+            ```
+            
+    - Sintaxe para os indeces do array
+        
+        ```php
+        foreach($array as $indice => $elemento) {
+                echo "Indice = $indice - Elemento = $elemento";
+            }
+        ```
+        
+        - Exemplo
+            
+            ```php
+            <?php
+                $funcionarios = ['João', 'Maria', 'Júlia'];
+                echo '<pre>';
+                print_r ($funcionarios);
+                echo '</pre>';
+                foreach($funcionarios as $idx => $nome) {
+                    echo "ID $idx - Nome: $nome <br>";
+                }
+            ?>
+            ```
+            
+    - Exemplo completo
+        
+        ```php
+        <?php
+            $funcionarios = array(
+                array('nome' => 'João', 'salario'=> 2500, 'data_nascimento' => "06/03/1970"),
+                array('nome' => 'Maria', 'salario'=> 3000),
+                array('nome' => 'Júlia', 'salario'=> 2200),
+            );
+        
+            echo '<pre>';
+            print_r($funcionarios);
+            echo '</pre>';
+        
+            foreach($funcionarios as $idx => $nome_funcionario){
+                foreach($nome_funcionario as $idx2 => $valor){
+                    echo "$idx2 - $valor <br />";
+                }
+                echo "<hr />";
+            }
+        ?>
+        ```
+        
+
+---
+
+- Exemplo de laço de repetição com array
+    - While
+        
+        ```php
+        $registros = array(
+                array('titulo' => 'Título notícia 1', 'conteudo' => 'Conteúdo notícia 1'),
+                array('titulo' => 'Título notícia 2', 'conteudo' => 'Conteúdo notícia 2'),
+                array('titulo' => 'Título notícia 3', 'conteudo' => 'Conteúdo notícia 3'),
+                array('titulo' => 'Título notícia 4', 'conteudo' => 'Conteúdo notícia 4'),
+            );
+        
+            echo '<pre>';
+            print_r($registros);
+            echo '</pre>';
+            echo '<br /><br /><br />';
+             $idx = 0;
+        
+            //count -> conta a quantidade de elementos de array
+            echo 'O array possui ' . count($registros) . ' registros';
+            
+            while ($idx < count($registros)) {
+                echo '<h3>' . $registros[$idx]['titulo'] . '</h3>';
+                echo '<p>' . $registros[$idx]['conteudo'] . '</p>';
+        
+                echo '<hr />';
+        
+                $idx++;
+            }
+        ```
+        
+    - Do while
+        
+        ```php
+        <?php
+            $registros = array(
+                array('titulo' => 'Título notícia 1', 'conteudo' => 'Conteúdo notícia 1'),
+                array('titulo' => 'Título notícia 2', 'conteudo' => 'Conteúdo notícia 2'),
+                array('titulo' => 'Título notícia 3', 'conteudo' => 'Conteúdo notícia 3'),
+                array('titulo' => 'Título notícia 4', 'conteudo' => 'Conteúdo notícia 4'),
+            );
+        
+            echo '<pre>';
+            print_r($registros);
+            echo '</pre>';
+            echo '<br /><br /><br />';
+             $idx = 0;
+        
+            //count -> conta a quantidade de elementos de array
+            echo 'O array possui ' . count($registros) . ' registros';
+            
+            do {
+                echo '<h3>' . $registros[$idx]['titulo'] . '</h3>';
+                echo '<p>' . $registros[$idx]['conteudo'] . '</p>';
+        
+                echo '<hr />';
+        
+                $idx++;
+            } while ($idx < count($registros));
+        ?>
+        ```
+        
+    - For
+        
+        ```php
+        <?php
+            $registros = array(
+                array('titulo' => 'Título notícia 1', 'conteudo' => 'Conteúdo notícia 1'),
+                array('titulo' => 'Título notícia 2', 'conteudo' => 'Conteúdo notícia 2'),
+                array('titulo' => 'Título notícia 3', 'conteudo' => 'Conteúdo notícia 3'),
+                array('titulo' => 'Título notícia 4', 'conteudo' => 'Conteúdo notícia 4'),
+            );
+        
+            echo '<pre>';
+            print_r($registros);
+            echo '</pre>';
+            echo '<br /><br /><br />';
+             $idx = 0;
+        
+            //count -> conta a quantidade de elementos de array
+            echo 'O array possui ' . count($registros) . ' registros';
+            
+            for ($idx = 0; $idx < count($registros); $idx++) {
+                echo '<h3>' . $registros[$idx]['titulo'] . '</h3>';
+                echo '<p>' . $registros[$idx]['conteudo'] . '</p>';
+        
+                echo '<hr />';
+            }
+        ?>
+        ```
+        
+    
+    ---
+    
+    - outro exemplo
+        
+        ```php
+        <?php
+            $array = array();
+        
+            while(count($array) <= 5){
+                $num = rand(1, 60);
+                if(!in_array($num, $array)){
+                    $array[] = $num;
+                }
+            }
+            echo '<pre>';
+        	    print_r($array);
+            echo '</pre>';
+        ?>
+        ```
+        
+
+---
+
+- Requisição
+    - Para fazer uma requisição PHP é preciso de algumas coisas
+    - <form>
+        - por exemplo no <form> a requisição é usando o action, e direcionando para o arquivo .php
+            
+            ```php
+            <form action="nome_arquivo.php">
+            </form>
+            ```
+            
+            - ou desse forma
+            
+            ```php
+            <form action="http://localhost/app_help_desk/nome_arquivo.php">
+            	<button class="btn btn-lg btn-info btn-block" type="submit">Entrar</button>
+            </form>
+            ```
+            
+        - é importante ressaltar que deve se ter um cuidado, é importante atribuir um valor type=”submit” para enviar todo o conteúdo do <form>
+    
+    ---
+    
+    - Então para isso é necessário da um name para os inputs se tornando assim uma espécie de variável, onde será guardado o valor inserido nela
+    - Por exemplo:
+        
+        ```php
+        <input name="email" type="email" class="form-control" placeholder="E-mail">
+        <input name="senha" type="password" class="form-control" placeholder="Senha">
+        ```
+        
+    - obs: o retorno para a requisição NÃO É nosso script PHP, e sim o RESULTADO da interpretação é possível conferir no (fd)
+
+---
+
+- Método de requisição GET
+    - Esse método é feito usando a super global $_GET, onde serão colocadas como parâmetro na URL
+        - ficando algo assim:
+            
+            ```php
+            http://site.com/seu_programa/login?emil=teste.gmail.com&senha=123123
+            ```
+            
+        - ou seja, ele atribui um ? querendo dizer q o resto pra direita é um parâmetro php
+    - Então o super global $_GET recupera esses parâmetros na URL
+        - ela é usada como um array então ficaria assim
+            
+            ```php
+            <?php
+                print_r($_GET);
+                echo '<br>';
+                echo $_GET['email']; // name que foi colocado em email
+                echo '<br>';
+                echo $_GET['senha']; // name que foi colocado em password
+            ?>
+            ```
+            
+
+---
+
+- Método de requisição POST
+    - Esse método é feito usando a super global $_POST
+        - ele anexa os dados do formulário dentro da própria requisição, tirando assim os dados da URL
+    - Então para isso é necessário atribuir o atributo “method” com o elemento “post”
+        
+        ```php
+        <form action="valida_login.php" method="post">
+        ```
+        
+    
+    ---
+    
+    - Então para recuperar esses dados tenha o seguinte exemplo
+        
+        ```php
+        <?php
+            print_r($_POST);
+            
+            echo '<br>';
+            echo $_POST['email'];
+            echo '<br>';
+            echo $_POST['senha'];
+        ?>
+        ```
+        
+    
+    ---
+    
+    - Repare que os dados estão sendo enviado junto com o formulário
+        
+        ![Untitled](PHP%20FULL%20deaf1067b7044f18b0e965cace7e519f/Untitled%204.png)
+        
+
+---
+
+- Verificação de dados
+    - Um exemplo de código para verificação
+        
+        ```php
+        <?php
+            $usuarios = array(
+                array('email' => 'adm@teste.com.br','senha' => '123123'),
+                array('email' => 'user@teste.com.br','senha' => '123123'),
+            );
+        
+            foreach($usuarios as $user){
+                echo 'Usuario app: ' . $user['email'] . ' / ' . $user['senha'];
+                echo '<br>';
+                echo 'Usuario form: ' . $_POST['email'] . ' / ' . $_POST['senha'];
+                echo '<hr>';
+        
+            }
+        ?>
+        ```
+        
+    - Exemplo completo
+        
+        ```php
+        <?php
+            //verificação
+            $usuario_autenticado = false;
+            $usuarios = array(
+                array('email' => 'adm@teste.com.br','senha' => '123123'),
+                array('email' => 'user@teste.com.br','senha' => '123123'),
+            );
+        
+            foreach($usuarios as $user){
+                if ($user['email'] == $_POST['email'] && $user['senha'] == $_POST['senha']) {
+                    $usuario_autenticado = true;
+                }
+            }
+            if ($usuario_autenticado) {
+                echo 'Usuário autenticado';
+            }else {
+                header('Location: index.php?login=erro');
+            }
+        ?>
+        ```
+        
+
+---
+
+- Função header()
+    - Ela espera uma localização para onde deve ser encaminhada (um desvio), forçando assim para onde ele deve ir
+        - e é legal passar um parâmetro
+    - Sintaxe
+        
+        ```php
+        header('Location: index.php?login=erro');
+        ```
+        
+
+---
+
+- isset()
+    - Verifica se foi setado um valor
+        
+        ```php
+        if(isset($_GET['login'])){
+        	echo($_GET['login'];
+        }
+        ```
+        
+
+---
+
+- —F
+    
+    ```php
+    <?php
+      if(isset($_GET['login']) && $_GET['login'] == 'erro')**{**
+    ?>
+    
+        algo deu errado
+    
+    <?php **}** ?>
+    ```
+    
+    - ou seja, as {} foi aberta em um elemento php e fechada em outra
+
+---
+
+- session
+    - A partir de um recurso session a gente irá permitir ou negar acesso
+    - É DE EXTERMA IMPORTÂNCIA sempre que for utilizar o session usar o sessions_start() sempre antes de qualquer outra função session ou de qualquer exibição de texto
+    - então geralmente utilizamos ela sempre no começo do código php
+        - tela1
+            
+            ```php
+            session_start();
+                $_SESSION['x'] = 'valor de sessão!';
+                print_r($_SESSION);
+                echo '<hr>';
+                
+                echo $_SESSION['y'] . '<br>';
+            ```
+            
+        - tela2
+            
+            ```php
+            <?php
+              session_start();
+              print_r($_SESSION);
+              echo '<br>';
+              echo $_SESSION['x'];
+            
+              $_SESSION['y'] = '1500';
+            ?>
+            ```
+            
+            - ou seja, é possível interligar valores de uma página a outra
+    - Essas sessões dura por volta de 3 horas no cookie
+    
+    ---
+    
+    - Exemplo completo
+        - Tela1
+            
+            ```php
+            <?php
+            
+                session_start();
+                
+                //verificação
+                $usuario_autenticado = false;
+                $usuarios = array(
+                    array('email' => 'adm@teste.com.br','senha' => '123123'),
+                    array('email' => 'user@teste.com.br','senha' => '123123'),
+                );
+            
+                foreach($usuarios as $user){
+                    if ($user['email'] == $_POST['email'] && $user['senha'] == $_POST['senha']) {
+                        $usuario_autenticado = true;
+                    }
+                }
+                if ($usuario_autenticado) {
+                    echo 'Usuário autenticado';
+                    $_SESSION['autenticacao'] = true;
+                }else {
+                    header('Location: index.php?login=erro');
+                    $_SESSION['autenticacao'] = false;
+                }
+            ?>
+            ```
+            
+        - Tela2
+            
+            ```php
+            <?php
+              session_start();
+              if(!isset($_SESSION['autenticacao']) || $_SESSION['autenticacao'] != true){
+                header('Location: index.php?login=naopoassimnao');
+              }
+            ?>
+            
+            <html>
+            	...
+            ```
+            
+
+---
+
+- include / include_once
+    - include
+        - inclusão
+        - Em caso de erro o include retorna um warning
+            - NÃO é barrada
+        - script1
+            
+            ```php
+            inicio | minha rede | vagas
+            <hr>
+            ```
+            
+        - script2 (o qual será apresentado)
+            
+            ```php
+            <?php
+                include("menu.php");
+            ?>
+            Conteúdo da página (início)
+            ```
+            
+            - ou
+            
+            ```php
+            <?php
+                include "menu.php";
+            ?>
+            Conteúdo da página (início)
+            ```
+            
+    
+    ---
+    
+    - include_once
+        - É feito da mesma forma do include, da mesma sintaxe e tudo mais
+        - Porém, se ja tiver outro include_once ele não irá repetir, ela é desconsiderada,
+            - então será executado apenas um include_once, será você que irá decidir o como será executado
+
+---
+
+- require / require_once
+    - require
+        - inclusão
+        - Em caso de erro o require retorna um fatal error
+            - ou seja, para
+            - é barrada
+        - script1
+            
+            ```php
+            inicio | minha rede | vagas
+            <hr>
+            ```
+            
+        - script2 (o qual será apresentado)
+            
+            ```php
+            <?php
+                require("menu.php");
+            ?>
+            Conteúdo da página (início)
+            ```
+            
+            - ou
+            
+            ```php
+            <?php
+                require "menu.php";
+            ?>
+            Conteúdo da página (início)
+            ```
+            
+    
+    ---
+    
+    - require_once
+        - É feito da mesma forma do require, da mesma sintaxe e tudo mais
+        - Porém, se ja tiver outro require_once ele não irá repetir, ela é desconsiderada,
+            - então será executado apenas um require_once, será você que irá decidir o como será executado
+
+---
+
+- unset()
+    - Serve para excluir indices de QUALQUER array
+    - Exemplo
+        
+        ```php
+        <?php
+            session_start();
+            echo '<pre>';
+                print_r($_SESSION);
+            echo "</pre><hr>";
+        
+            unset($_SESSION['x']); //remove apenas se existir
+            
+            echo '<pre>';
+                print_r($_SESSION);
+            echo "</pre><hr>";
+        
+        ?>
+        ```
+        
+        - então caso o indice não exista, ele não retornará um erro, ele apenas irá ignorar
+
+---
+
+- session_destroy()
+    - Destroi os indices da super global $_SESSION
+    - Exemplo
+        
+        ```php
+        <?php
+            session_start();
+            session_destroy();
+            header('Location: index.php');
+        
+        ?>
+        ```
+        
+        - ele destroi apenas na próxima execução que não teremos mais acesso as variáveis do session
+            - ou seja, mesmo após a execução do session_destroy, nós teremos acessos aos valores das vereáveis de seção, porque a requisição já foi feita
+            - então teremos que fazer uma nova requisição para enxergar a a destruição desses valores
+    - Então é comum forçar um redirecionamento
+        - ou seja, forcar uma nova requisição
+
+---
+
+- fopen() / fwrite() / fclose()
+    - Os parâmetros se encontram nessa página
+        - [https://www.php.net/manual/en/function.fopen](https://www.php.net/manual/en/function.fopen)
+    - fopen()
+        - Sintaxe
+            
+            ```php
+            fopen('nome_do_arquivo', parâmetros);
+            //ou
+            $arquivo = fopen('nome_do_arquivo', parâmetros);
+            ```
+            
+    
+    ---
+    
+    - fwrite()
+        - Sintaxe
+            
+            ```php
+            fwrite($arquivo, $texto);
+            ```
+            
+    
+    ---
+    
+    - fclose()
+        - Sintaxe
+            
+            ```php
+            fwrite($arquivo);
+            ```
+            
+            - $arquivo esse que tinha sido aberto
+    
+    ---
+    
+    - Exemplo final
+        
+        ```php
+        <?php
+            echo '<pre>';
+            print_r($_POST);
+            echo '</pre>';
+        
+            //tratativa do texto
+            $texto = implode('#', str_replace('#', '-', $_POST));
+            
+            //abrindo o arquivo
+            $arquivo = fopen('arquivo', 'a');
+            
+            //escrevendo o texto
+            fwrite($arquivo, $texto);
+        
+            //fechando o arquivo
+            fclose($arquivo);
+            
+        ?>
+        ```
+        
+
+---
+
+- PGP_EOL
+    - Sigla
+        - E = end;
+        - O = of;
+        - L = line;
+    
+    ---
+    
+    - Ela é meio que uma continuação/junção com o fopen(), fwrite(), fclose()
+    - Ela basicamente quebra a linha
+    - Exemplo final
+        
+        ```php
+        <?php
+            echo '<pre>';
+            print_r($_POST);
+            echo '</pre>';
+        
+            //tratativa do texto
+            $texto = '/*'. implode('#', str_replace('#', '-', $_POST)) . '*/' . PHP_EOL . PHP_EOL;
+            
+            //abrindo o arquivo
+            $arquivo = fopen('arquivo', 'a');
+            
+            //escrevendo o texto
+            fwrite($arquivo, $texto);
+        
+            //fechando o arquivo
+            fclose($arquivo);
+            
+        ?>
+        ```
+        
+
+---
+
+- feof()
+    - END OF FILE
+    - É uma função nativo da PHP
+    - Ela percorre até o fim do arquivo
+    - Caso ela encontre o final do arquivo ela retorna true
+        - caso contrário retorna false
+    - Ou seja, ela confere se é a ultima linha
+    - Exemplo
+        
+        ```php
+        $arquivo = fopen('arquivo.txt', 'r');
+        while(!feof($arquivo)){
+        }
+        fclose($arquivo); //é IMPORTANTE FECHAR O ARQUIVOO
+        ```
+        
+
+---
+
+- fgets()
+    - Ele recupera o que está naquela linha
+        - até o fim,
+        - ou se pode colocar a quantidade de bits limite
+    - Exemplo
+        
+        ```php
+        $arquivo = fopen('arquivo.txt', 'r');
+          while(!feof($arquivo)){
+            fgets($arquivo);
+          }
+          fclose($arquivo);
+        ```
+        
+
+---
+
+- —F
+    - Repare q cada linha foi atribuída a um array
+    
+    ```php
+    $chamados = [];
+    
+      $arquivo = fopen('arquivo.txt', 'r');
+      while(!feof($arquivo)){
+        $registro = fgets($arquivo);
+        $chamados[] = $registro;
+      }
+    ```
+    
+
+---
+
+- Segurança
+    - Se você reparar, os scripts estão sempre ficando no diretório público
+    - Então para resolver isso temos as seguintes etapas:
+        1. Abra o explorer que tenha os arquivou
+            1. ou em
+            
+            ![Untitled](PHP%20FULL%20deaf1067b7044f18b0e965cace7e519f/Untitled%205.png)
+            
+        2. Então crie uma pasta com o nome desejado
+            
+            ![Untitled](PHP%20FULL%20deaf1067b7044f18b0e965cace7e519f/Untitled%206.png)
+            
+        3. Passe para essa pasta os arquivos sigilosos/importantes
+            
+            ![Untitled](PHP%20FULL%20deaf1067b7044f18b0e965cace7e519f/Untitled%207.png)
+            
+        4. Crie um arquivo .php no lugar do qual foi retirado o script importante, com o mesmo nome para não quebrar o script
+            
+            ![Untitled](PHP%20FULL%20deaf1067b7044f18b0e965cace7e519f/Untitled%208.png)
+            
+        5. Então basta criar um script para chamar o arquivo necessário
+            
+            ```php
+            <?php
+                require "../../app_help_desk/valida_login.php";
+            ?>
+            ```
+            
+        6. Por fim, troque os diretórios do arquivo “arquivo.txt” para seu local de destino
+            
+            ```php
+            <?php
+                require "../../app_help_desk/valida_login.php";
+            ?>
+            
+            <?php
+            	$arquivo = fopen('../../app_help_desk/arquivo.txt', 'r');
+            ?>
+            ```
+            
+
+---
+
+- Glossário
+    
+    fd == ao clicar em f12 e ir em network/rede/ou_algo_do_tipo é possível ver as requisições feito ao servidor
+    
+    —F == importante
