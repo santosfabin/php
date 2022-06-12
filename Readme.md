@@ -3641,6 +3641,324 @@
                     
                     </aside>
                     
+    
+    ---
+    
+    - Atributos e métodos estáticos
+        - É possível acessar métodos e atributos estáticos sem a iniciação de uma instancia do objeto
+        - Porém não é possível acessar atributos e métodos comuns a partir disso
+        - Exemplo
+            - não é necessário utilizar
+                - $var = new Objeto();
+            - simplesmente utilize
+                - Objeto::$var;
+            
+            ```php
+            <?php
+                class Exemplo {
+                    public static $atributo1 = 'Atributo estático';
+                    public $atributo2 = 'Atributo normal';
+            
+                    public static function metodo1()
+                    {
+                        echo 'Método estático';
+                    }
+            
+                    public function metodo2()
+                    {
+                        echo 'Método normal';
+                    }
+                }
+            
+                //$x = new Exemplo();
+                echo Exemplo::$atributo1;
+                echo '<br>';
+                Exemplo::metodo1();
+            ?>
+            ```
+            
+        
+        ---
+        
+        - Não é possível acessar atributos utilizando o ‘→’ a partir de uma instancia
+        - Exemplo de erro
+            
+            ```php
+            <?php
+                class Exemplo {
+                    public static $atributo1 = 'Atributo estático';
+                    public $atributo2 = 'Atributo normal';
+            
+                    public static function metodo1()
+                    {
+                        echo 'Método estático';
+                    }
+            
+                    public function metodo2()
+                    {
+                        echo 'Método normal';
+                    }
+                }
+            
+                $x = new Exemplo();
+                $x->$atributo1;
+            
+            ?>
+            ```
+            
+        
+        ---
+        
+        - Não é possível utilizar o ‘$this’ em métodos
+        - Exemplo de erro
+            
+            ```php
+            <?php
+                class Exemplo {
+                    public static $atributo1 = 'Atributo estático';
+                    public $atributo2 = 'Atributo normal';
+            
+                    public static function metodo1()
+                    {
+                        $this->atributo1;
+                        echo 'Método estático';
+                    }
+            
+                    public function metodo2()
+                    {
+                        echo 'Método normal';
+                    }
+                }
+                Exemplo::metodo1();
+            ?>
+            ```
+            
+        
+    
+    ---
+    
+    - Interfaces
+        - Ela iniciará penas os métodos, atributos não poderão ser inicializado
+        - Sua sintaxe é semelhante a de uma class, sendo
+            
+            ```php
+            interface nomeInterface{
+                public function exemplo();
+                public function outroExemplo();
+            }
+            ```
+            
+        - Perceba que ela apenas iniciará os métodos, e seu escopo será definido posteriormente fora da interface
+        
+        ---
+        
+        - Então para implementar a interface em uma class é feito da seguinte forma:
+        - Sintaxe
+            
+            ```php
+            interface nomeInterface{
+                public function exemplo();
+                public function outroExemplo();
+            }
+            class ObjetoTeste implements nomeInterface
+            {
+            
+            }
+            ```
+            
+        - Porém se for deixado dessa maneira, acontecerá um fatal error, pois não foi implementado conteúdo ao(s) método(s)
+        - Então
+            
+            ```php
+            interface nomeInterface{
+                public function exemplo();
+                public function outroExemplo();
+            }
+            class ObjetoTeste implements nomeInterface
+            {
+                public function exemplo()
+                {
+                    echo 'Exemplo';
+                }
+                public function outroExemplo()
+                {
+                    echo 'Outro exemplo';
+                }
+            }
+            ```
+            
+        
+        <aside>
+        ❗ É bom relembrar que, não faz muito sentido implementar na interface métodos private ou protected
+        
+        </aside>
+        
+        - Exemplo complementar
+            
+            ```php
+            <?php
+            
+                interface equipamentoEletronicoInterface{
+                    public function ligar();
+                    public function desligar();
+                }
+            
+                class Geladeira implements equipamentoEletronicoInterface
+                {
+                    public function abrirPorta()
+                    {
+                        echo 'Abrir a porta';
+                    }
+                    public function ligar()
+                    {
+                        echo 'Ligar';
+                    }
+                    public function desligar()
+                    {
+                        echo 'Desligar';
+                    }
+            
+                }
+            
+                class TV implements equipamentoEletronicoInterface
+                {
+                    public function trocarCanal()
+                    {
+                        echo 'Trocar canal';
+                    }
+                    public function ligar()
+                    {
+                        echo 'Ligar';
+                    }
+                    public function desligar()
+                    {
+                        echo 'Desligar';
+                    }
+                }
+            
+                $x = new Geladeira();
+                $y = new TV();
+            ?>
+            ```
+            
+        
+        ---
+        
+        - Para implementar mais de uma interface basta colocar uma virgula(,) e colocar o próximo nome da interface
+        - Sintaxe
+            
+            ```php
+            class Humano implements Mamiferointerface, TerrestreInterface{
+                    [...]
+                }
+            ```
+            
+        - Exemplo
+            
+            ```php
+            <?php
+                interface Mamiferointerface{
+                    public function respirar();
+                }
+                interface TerrestreInterface{
+                    public function andar();
+                }
+                interface AquaticoInterface{
+                    public function nadar();
+                }
+            
+                class Humano implements Mamiferointerface, TerrestreInterface
+                {
+                    public function andar()
+                    {
+                        echo 'andar';
+                    }
+            
+                    public function respirar()
+                    {
+                        echo 'respirar';
+                    }
+                    public function conversar()
+                    {
+                        echo 'conversar';
+                    }
+                }
+            
+                class Baleia implements Mamiferointerface, AquaticoInterface
+                {
+                    public function respirar()
+                    {
+                        echo 'respirar';
+                    }
+                    public function nadar()
+                    {
+                        echo 'nadar';
+                    }
+                    protected function esguichar()
+                    {
+                        echo 'esguichar';
+                    }
+                }
+            ?>
+            ```
+            
+        
+        ---
+        
+        - Herança de interface
+            - interface também pode receber herança de outra interface, então
+            - Sintaxe
+                
+                ```php
+                interface Primeiro
+                {
+                    public function ExemploPrimeiro();
+                }
+                interface Segunda extends Primeiro
+                {
+                    public function ExemploSegundo();
+                }
+                class Codigo implements Segunda
+                {
+                    public function ExemploPrimeiro()
+                    {
+                        echo 'pri';
+                    }
+                    public function ExemploSegundo()
+                    {
+                        echo 'seg';
+                    }
+                }
+                ```
+                
+            - Perceba que é obrigatório utilizar os métodos da interface e a herança que ela recebeu
+            - Exemplo concreto
+                
+                ```php
+                <?php
+                    interface AnimalInterface
+                    {
+                        public function comer();
+                    }
+                    interface AveInterface extends AnimalInterface
+                    {
+                        public function voar();
+                    }
+                    class Papagaio implements AveInterface
+                    {
+                        public function voar()
+                        {
+                            echo 'voar';
+                        }
+                        public function comer()
+                        {
+                            echo 'comer';
+                        }
+                    }
+                ?>
+                ```
+                
+            
         
 
 ---
