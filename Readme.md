@@ -1,5 +1,14 @@
 # PHP FULL
 
+- Glossário
+    
+    fd == ao clicar em f12 e ir em network/rede/ou_algo_do_tipo é possível ver as requisições feito ao servidor
+    
+    —F == importante
+    
+
+---
+
 - Introdução
     - Arpanet = (pai da internet)
         - conexão de computadores
@@ -2359,6 +2368,9 @@
 ---
 
 - require / require_once
+    - É utilizado para importação de outro arquivo
+    - Essa importação não inclui function e constantes
+    - Apenas class e interface
     - require
         - inclusão
         - Em caso de erro o require retorna um fatal error
@@ -3963,8 +3975,297 @@
 
 ---
 
-- Glossário
+- Namespaces
+    - É usado para “separar”/”isolando” métodos com o mesmo nome
+    - Exemplo
+        
+        ```php
+        namespace A;
+        quadrado()
+        {
+        }
+        
+        /*a partir daqui o quadrado selecionado
+        sem nenhum parâmetro receberá o namespace B*/
+        
+        namespace B;
+        quadrado()
+        {
+        }
+        ```
+        
+    - Então para acessar outro namespace é necessário utilizar o \
+    - Sintaxe
+        
+        ```php
+        namespace A;
+        quadrado()
+        {
+        }
+        namespace B;
+        quadrado()
+        {
+        }
+        
+        $c = new \A\quadrado();
+        ```
+        
+    - Exemplos
+        
+        ```php
+        <?php
+        
+            namespace A;
+            class Cliente
+            {
+                public $nome = 'Jorge';
+                public function __get($attr)
+                {
+                    return $this->$attr;
+                }
+            }
+            namespace B;
+            class Cliente
+            {
+                public $nome = 'Jamilton';
+                public function __get($attr)
+                {
+                    return $this->$attr;
+                }
+            }
+            $c = new \A\Cliente();
+            print_r($c);
+            echo $c->__get('nome');
+        ?>
+        ```
+        
+        - É possível implementar uma interface de outro namespace
+            
+            ```php
+            <?php
+            
+                namespace A;
+                class Cliente implements \B\CadastroInterface
+                {
+                    public $nome = 'Jorge';
+            
+                    public function __contruction()
+                    {
+                        echo '<pre>';
+                        print_r(get_class_methods($this));
+                        echo '</pre>';
+                    }
+            
+                    public function __get($attr)
+                    {
+                        return $this->$attr;
+                    }
+                    public function salvar()
+                    {
+                        echo 'salvar';
+                    }
+                    public function remover()
+                    {
+                        echo 'remover';
+                    }
+                }
+                interface CadastroInterface
+                {
+                    public function salvar();
+                }
+            
+                namespace B;
+                class Cliente implements \A\CadastroInterface
+                {
+                    public $nome = 'Jamilton';
+            
+                    public function __contruction()
+                    {
+                        echo '<pre>';
+                        print_r(get_class_methods($this));
+                        echo '</pre>';
+                    }
+            
+                    public function __get($attr)
+                    {
+                        return $this->$attr;
+                    }
+                    public function remover()
+                    {
+                        echo 'remover';
+                    }
+                    public function salvar()
+                    {
+                        echo 'salvar';
+                    }
+                }
+                interface CadastroInterface
+                {
+                    public function remover();
+                }
+            
+                $c = new \b\Cliente();
+                print_r($c);
+                echo $c->__get('nome');
+            ?>
+            ```
+            
+
+---
+
+- Packagist
+    - [https://packagist.org](https://packagist.org/)
+    - É usado para utilização de bibliotecas
+
+---
+
+- Bibliotecas
+    - Relembrando que na hora da importação de uma biblioteca utilizando o require, importará apenas class e interface
+    - Utilizando a biblioteca
+        
+        ```php
+        <?php
+            require "../Biblioteca/Lib1/lib1.php";
+            require "../Biblioteca/Lib2/lib2.php";
+        
+            use A\Cliente;
+        
+            $c = new Cliente();
+            echo '<pre>';
+            print_r($c);
+            echo '</pre>';
+            echo $c->__get('nome');
+        ?>
+        ```
+        
     
-    fd == ao clicar em f12 e ir em network/rede/ou_algo_do_tipo é possível ver as requisições feito ao servidor
+    ---
     
-    —F == importante
+    - Renomeando um use de uma biblioteca
+        
+        ```php
+        <?php
+            require "../Biblioteca/Lib1/lib1.php";
+            require "../Biblioteca/Lib2/lib2.php";
+        
+            use A\Cliente as C1;
+            use B\Cliente;
+        
+            $c = new C1();
+            echo '<pre>';
+            print_r($c);
+            echo '</pre>';
+            echo $c->__get('nome');
+        ?>
+        ```
+        
+    
+
+---
+
+- Tratamento de erros
+    - try
+        - É possível utilizar quantos try forem necessário
+        - Ele transformará um fatal error em um error, podendo assim ser tratado de alguma forma
+        - Ele precisa ser utilizado com pelo menos o catch ou o finally, ou seja, é possível utilizar os dois juntos, ou apenas um deles
+    
+    ---
+    
+    - catch()
+        - Sintaxe
+            
+            ```php
+            catch(Error $var)
+            {
+            		//conteúdo
+            }
+            ```
+            
+        - É importante sitar que, só será executado o catch somente se ocorrer um Error
+        - Exemplo
+            
+            ```php
+            <?php
+            
+                try{
+                    echo '<h3> *** try *** </h3>';
+                    $sql = 'Select * from clientes';
+                    mysql_query($sql);
+                }
+                catch(Error $e)
+                {
+                    echo '<h3> *** catch *** </h3>';
+                    echo '<p style="color: red">', $e, '</p>';
+                }
+                finally{
+                    echo '<h3> *** finally *** </h3>';
+                }
+            ?>
+            ```
+            
+    
+    ---
+    
+    - finally
+        - Caso tenho o try e o catch é opcional a utilização do finally
+        - Amostra
+            
+            ```php
+            <?php
+            
+                try{
+                    echo '<h3> *** try *** </h3>';
+                    $sql = 'Select * from clientes';
+                    mysql_query($sql);
+                }
+                catch(Error $e)
+                {
+                    echo '<h3> *** catch *** </h3>';
+                    echo '<p style="color: red">', $e, '</p>';
+                }/*
+                finally{
+                    echo '<h3> *** finally *** </h3>';
+                }*/
+            ?>
+            ```
+            
+    
+    ---
+    
+    - throw
+        - É usado para efetuar um erro
+            
+            ```php
+            <?php
+            
+                try{
+                    echo '<h3> *** try *** </h3>';
+                    /* $sql = 'Select * from clientes';
+                    mysql_query($sql); */
+                    if(!file_exists('require_arquivo_a.php'))
+                    {
+                        throw new Exception('O arquivo deveria estar disponível as '. date('d/m/Y H:i:s').' mas não estava, porém vamos seguir');
+                    }
+                }
+                catch(Error $e)
+                {
+                    echo '<h3> *** catch Error *** </h3>';
+                    echo '<p style="color: red">'. $e . '</p>';
+                }
+                catch(Exception $e)
+                {
+                    echo '<h3> *** catch Exception *** </h3>';
+                    echo '<p style="color: red">'. $e . '</p>';
+            
+                }
+                finally{
+                    echo '<h3> *** finally *** </h3>';
+                }
+            ?>
+            ```
+            
+        - É possível utilizar Error no lugar de Exception também
+    
+    ---
+    
+    - Erros customizados
