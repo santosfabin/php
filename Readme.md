@@ -1899,7 +1899,7 @@
                 echo '</pre>';
             
                 foreach($itens as $item){
-                    echo "$item <br.>";
+                    echo "$item <br>";
                 }
             ?>
             ```
@@ -4299,3 +4299,523 @@
         
         - Perceba que é possível utilizar herdado métodos nativos do php
         - Então a partir disso é simples customizar erros
+
+---
+
+- Produção do App Send Email
+    - Introdução/Recursos
+        - Para a criação dessa aplicação utilizaremos as seguintes coisas:
+            - Código
+                
+                ```php
+                <html>
+                	<head>
+                		<meta charset="utf-8" />
+                    	<title>App Mail Send</title>
+                
+                    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+                
+                	</head>
+                
+                	<body>
+                
+                		<div class="container">  
+                
+                			<div class="py-3 text-center">
+                				<img class="d-block mx-auto mb-2" src="logo.png" alt="" width="72" height="72">
+                				<h2>Send Mail</h2>
+                				<p class="lead">Seu app de envio de e-mails particular!</p>
+                			</div>
+                
+                      		<div class="row">
+                      			<div class="col-md-12">
+                  				
+                					<div class="card-body font-weight-bold">
+                						<form>
+                							<div class="form-group">
+                								<label for="para">Para</label>
+                								<input type="text" class="form-control" id="para" placeholder="joao@dominio.com.br">
+                							</div>
+                
+                							<div class="form-group">
+                								<label for="assunto">Assunto</label>
+                								<input type="text" class="form-control" id="assunto" placeholder="Assundo do e-mail">
+                							</div>
+                
+                							<div class="form-group">
+                								<label for="mensagem">Mensagem</label>
+                								<textarea class="form-control" id="mensagem"></textarea>
+                							</div>
+                
+                							<button type="submit" class="btn btn-primary btn-lg">Enviar Mensagem</button>
+                						</form>
+                					</div>
+                				</div>
+                      		</div>
+                      	</div>
+                
+                	</body>
+                </html>
+                ```
+                
+            
+            ---
+            
+            - Imagem
+                - Para esse recurso, você poderá utilizar de qualquer imagem de seu interesse
+                - Recebendo a seguinte nomenclatura:
+                    - logo.png
+    
+    ---
+    
+    - Ação/Execução
+        - action
+            - De início devemos utilizar o atributo ‘action’ dentro do form para o envio dos dados passar por um arquivo .php, para ser decidido o que deverá acontecer com esse form, junto com o atributo ‘method’, com o parâmetro ‘post’ para o envio de dados do programa, ficando assim:
+                
+                ```php
+                <form action="processa_envio.php" method="post">
+                ```
+                
+            - Então deverá ser criado um novo arquivo chamado ‘processa_envio.php’
+        
+        ---
+        
+        - name
+            - Depois devemos nomear com o ‘name’ cada input:
+                
+                ```php
+                <input name="para" type="text" class="form-control" id="para" placeholder="joao@dominio.com.br">
+                <input name="assunto" type="text" class="form-control" id="assunto" placeholder="Assundo do e-mail">
+                <textarea name="mensagem" class="form-control" id="mensagem"></textarea>
+                ```
+                
+        
+        ---
+        
+        - 1º teste
+            - Para nosso 1º teste vamos escrever no novo arquivo criado:
+                
+                ```php
+                <?php
+                    print_r($_POST);
+                ```
+                
+            - Caso esteja aparecendo as informações corretamente, iremos proceguir
+        
+        ---
+        
+        - class Mensagem
+            - Agora iremos iniciar uma function para o processamento dos dados
+            - Nela iremos colocar 3 variáveis que servirão de base para cada um dos inputs
+            - Atribuiremos o método __get e __set
+            - Então iniciaremos a instancia de um objeto para a utilização do mesmo
+            - Assim setaremos com o método __set cada uma das variáveis
+                
+                ```php
+                <?php
+                    class Mensagem
+                    {
+                        private $para = null;
+                        private $assunto = null;
+                        private $mensagem = null;
+                
+                        public function __get($attr)
+                        {
+                            return $this->$attr;
+                        }
+                
+                        public function __set($attr, $valor)
+                        {
+                            $this->$attr = $valor;
+                        }
+                
+                    }
+                    $mensagem = new Mensagem();
+                    $mensagem->__set('para', $_POST['para']);
+                    $mensagem->__set('assunto', $_POST['assunto']);
+                    $mensagem->__set('mensagem', $_POST['mensagem']);
+                
+                    print_r($mensagem);
+                ```
+                
+        
+        ---
+        
+        - Verificação de dados
+            - Faremos uma verificação se os dados estão validos, se estão preenchidos
+                
+                ```php
+                <?php
+                    class Mensagem
+                    {
+                        private $para = null;
+                        private $assunto = null;
+                        private $mensagem = null;
+                
+                        public function __get($attr)
+                        {
+                            return $this->$attr;
+                        }
+                
+                        public function __set($attr, $valor)
+                        {
+                            $this->$attr = $valor;
+                        }
+                
+                        public function mensagemValida()
+                        {
+                            if(empty($this->para) || empty($this->assunto) ||empty($this->mensagem))
+                            {
+                                return false;
+                            }
+                            return true;
+                        }
+                
+                    }
+                    $mensagem = new Mensagem();
+                    $mensagem->__set('para', $_POST['para']);
+                    $mensagem->__set('assunto', $_POST['assunto']);
+                
+                		//reparem que essa condicional está depois de serem setados os dados
+                    $mensagem->__set('mensagem', $_POST['mensagem']);
+                    if($mensagem->mensagemValida())
+                    {
+                        echo 'Mensagem válida';
+                    }else
+                    {
+                        echo 'Mensagem inválida';
+                    }
+                ```
+                
+        
+        ---
+        
+        - Inclusão de biblioteca
+            - Entraremos no site:
+                1. [https://packagist.org/packages/phpmailer/phpmailer](https://packagist.org/packages/phpmailer/phpmailer)
+            - Então iremos para o github do criador e baixaremos a ultima versão
+            - Então extraia o arquivo
+            - Depois disso copie para a pasta de nossa aplicação, a pasta ‘scr’ extraida
+            - Renomeie para ‘PHPMailer’ essa pasta para facilitar o entendimento
+            
+            ---
+            
+            - Então, no arquivo ‘processa_envio’, incluiremos as bibliotecas:
+                
+                ```php
+                require "./PHPMailer/Exception.php";
+                require "./PHPMailer/OAuth.php";
+                require "./PHPMailer/PHPMailer.php";
+                require "./PHPMailer/POP3.php";
+                require "./PHPMailer/SMTP.php";
+                ```
+                
+            
+            ---
+            
+            - Fazemos agora a configuração do namespace
+            - Como ele já tem um namespace apenas colocaremos no nosso código, igual está no próprio arquivo
+                
+                ```php
+                use PHPMailer\PHPMailer\PHPMailer;
+                use PHPMailer\PHPMailer\Exception;
+                use PHPMailer\PHPMailer\SMTP;
+                ```
+                
+        
+        ---
+        
+        - Reorganizando
+            - Agora iremos reorganizar nosso código para implementar o código já feito na biblioteca
+            - Retire o else e rearrange o if da seguinte maneira
+                
+                ```php
+                if(!$mensagem->mensagemValida())
+                    {
+                        echo 'Mensagem inválida';
+                    }
+                ```
+                
+            - Então copie o código que está no github para o nosso código, ficando assim:
+                
+                ```php
+                <?php
+                
+                    require "./PHPMailer/Exception.php";
+                    require "./PHPMailer/OAuth.php";
+                    require "./PHPMailer/PHPMailer.php";
+                    require "./PHPMailer/POP3.php";
+                    require "./PHPMailer/SMTP.php";
+                
+                    use PHPMailer\PHPMailer\PHPMailer;
+                    use PHPMailer\PHPMailer\Exception;
+                    use PHPMailer\PHPMailer\SMTP;
+                
+                    class Mensagem
+                    {
+                        private $para = null;
+                        private $assunto = null;
+                        private $mensagem = null;
+                
+                        public function __get($attr)
+                        {
+                            return $this->$attr;
+                        }
+                
+                        public function __set($attr, $valor)
+                        {
+                            $this->$attr = $valor;
+                        }
+                
+                        public function mensagemValida()
+                        {
+                            if(empty($this->para) || empty($this->assunto) ||empty($this->mensagem))
+                            {
+                                return false;
+                            }
+                            return true;
+                        }
+                
+                    }
+                    $mensagem = new Mensagem();
+                    $mensagem->__set('para', $_POST['para']);
+                    $mensagem->__set('assunto', $_POST['assunto']);
+                    $mensagem->__set('mensagem', $_POST['mensagem']);
+                
+                    //print_r($mensagem);
+                
+                    if(!$mensagem->mensagemValida())
+                    {
+                        echo 'Mensagem inválida';
+                    }
+                
+                    $mail = new PHPMailer(true);
+                
+                    try {
+                        //Server settings
+                        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+                        $mail->isSMTP();                                            //Send using SMTP
+                        $mail->Host       = 'smtp.example.com';                     //Set the SMTP server to send through
+                        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+                        $mail->Username   = 'user@example.com';                     //SMTP username
+                        $mail->Password   = 'secret';                               //SMTP password
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+                        $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+                    
+                        //Recipients
+                        $mail->setFrom('from@example.com', 'Mailer');
+                        $mail->addAddress('joe@example.net', 'Joe User');     //Add a recipient
+                        $mail->addAddress('ellen@example.com');               //Name is optional
+                        $mail->addReplyTo('info@example.com', 'Information');
+                        $mail->addCC('cc@example.com');
+                        $mail->addBCC('bcc@example.com');
+                    
+                        //Attachments
+                        $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+                        $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+                    
+                        //Content
+                        $mail->isHTML(true);                                  //Set email format to HTML
+                        $mail->Subject = 'Here is the subject';
+                        $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
+                        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+                    
+                        $mail->send();
+                        echo 'Message has been sent';
+                    } catch (Exception $e) {
+                        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                    }
+                ```
+                
+            - Para mostrar aonde eu peguei, aqui está o link e uma amostra de onde foi retirado:
+                - [https://github.com/PHPMailer/PHPMailer/tree/v6.6.2](https://github.com/PHPMailer/PHPMailer/tree/v6.6.2)
+                
+                ![Untitled](PHP%20FULL%209da733f133934045afa87d7ba4e7997d/Untitled%209.png)
+                
+        
+        ---
+        
+        - Parando processo
+            - Então caso a mensagem seja inválida, iremos parar todo o processo, utilizando o método nativo do PHP die()
+            - Ficando assim:
+                
+                ```php
+                if(!$mensagem->mensagemValida())
+                {
+                    echo 'Mensagem inválida';
+                    die();
+                }
+                ```
+                
+        
+        ---
+        
+        - Configurando processos para teste
+            - Agora iremos mudar no ‘processa_envio.php’ as credenciais bases para envio do email
+                
+                ![Untitled](PHP%20FULL%209da733f133934045afa87d7ba4e7997d/Untitled%2010.png)
+                
+            - Agora precisaremos saber o SMTP do servidor que enviará o email
+            - Utilizaremos a do google, o gmail
+            - Então pesquisaremos ‘SMTP google gmail server’
+                - Link: [https://support.google.com/a/answer/176600?hl=pt](https://support.google.com/a/answer/176600?hl=pt)
+            - DNS do gmail:[smtp-relay.gmail.com](http://smtp-relay.gmail.com/)
+                
+                ![Untitled](PHP%20FULL%209da733f133934045afa87d7ba4e7997d/Untitled%2011.png)
+                
+            - Afim de testes deixaremos dessa maneira
+                
+                ![Untitled](PHP%20FULL%209da733f133934045afa87d7ba4e7997d/Untitled%2012.png)
+                
+            - E não utilizaremos anexos
+                
+                ![Untitled](PHP%20FULL%209da733f133934045afa87d7ba4e7997d/Untitled%2013.png)
+                
+            - Conteúdo do email
+                
+                ![Untitled](PHP%20FULL%209da733f133934045afa87d7ba4e7997d/Untitled%2014.png)
+                
+        
+        ---
+        
+        - Configurações de envio finais
+            - Agora iremos recuperar pela instancia
+                - $mensagem→__get(’var’)
+            - Ficando desta forma
+            
+            ```php
+            $mail->addAddress($mensagem->__get('para'));
+            $mail->Subject = $mensagem->__get('assunto');
+            $mail->AltBody = $mensagem->__get('mensagem');
+            $mail->AltBody = 'É necessário ter suporte HTML para ter acesso total a essa mensagem';
+            //embaixo de $mail->send();
+            echo 'E-magil enviado com sucesso!';
+            ```
+            
+        
+        ---
+        
+    
+    ---
+    
+    - Restrições
+        - Primeiro ao invés de matar o processor com o die(), iremos renvia-lo ao index.php
+            
+            ```php
+            //die();
+            header('Location: index.php?erroAoEnviar');
+            ```
+            
+        
+        ---
+        
+        - Agora caso tenha feito o envio da mensagem
+        - Criaremos primeiro um array para isso
+        - Logo embaixo das variáveis criadas
+            
+            ```php
+            public $status = ['codigo_status' => null, 'descricao_status' => ''];
+            ```
+            
+        - Agora embaixo de ‘$mail->sendo();’
+            
+            ```php
+            $mensagem->status['codigo_status'] = 1;
+            $mensagem->status['descrição_status'] = 'E-magil enviado com sucesso!';
+            ```
+            
+        - Agora em catch
+            
+            ```php
+            $mensagem->status['codigo_status'] = 2;
+            $mensagem->status['descrição_status'] = 'E-mail não enviado!' . 'Detalhes do erro: ' . $mail->ErrorInfo
+            ```
+            
+        - Mude
+            
+            ```php
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+            	//para
+            $mail->SMTPDebug = false;
+            ```
+            
+            - comente o print_r
+        - Agora ao fim do comando <?php ?>
+            
+            ```php
+            <html>
+                <head>
+                <meta charset="utf-8" />
+                	<title>App Mail Send</title>
+            
+                	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+                </head>
+                <body>
+                    <div class="container">
+                    <div class="py-3 text-center">
+            				<img class="d-block mx-auto mb-2" src="logo.png" alt="" width="72" height="72">
+            				<h2>Send Mail</h2>
+            				<p class="lead">Seu app de envio de e-mails particular!</p>
+            			</div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <?php
+                                    if($mensagem->status['codigo_status'] == 1)
+                                    {
+                                ?>
+                                    <div class="container">
+                                        <h1 class="display-4 text-success">Sucesso</h1>
+                                        <p>
+                                            <?=
+                                                $mensagem->status['descricao_status']
+                                            ?>
+                                        </p>
+                                        <a href="index.php" class="btn-success btn-lg mt-5 text-white">voltar</a>
+                                    </div>
+                                <?php
+                                    }
+                                ?>
+                                
+                                <?php
+                                    if($mensagem->status['codigo_status'] == 2)
+                                    {
+                                ?>
+                                    <div class="container">
+                                        <h1 class="display-4 text-danger">Ops!</h1>
+                                        <p>
+                                            <?=
+                                                $mensagem->status['descricao_status']
+                                            ?>
+                                        </p>
+                                        <a href="index.php" class="btn-success btn-lg mt-5 text-white">voltar</a>
+                                    </div>
+                                    
+                                <?php
+                                    }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </body>
+            </html>
+            ```
+            
+            - nesse código ja tem feito a lógica de envio de email feito
+    
+    ---
+    
+    - Segurança
+        - Agora iremos mover o arquivo processa_envio.php para uma pasta fora do htdocs
+        - Então crie uma pasta e coloque nosso arquivo la
+        - Então no iremos criar um novo arquivo que irá substituir o processa_envio.php
+        - Criaremos um novo arquivo com o mesmo nome (processa_envio.php), na pasta onde fica o index.php
+        - Então esse arquivo enviará para o arquivo original
+            - Seu conteúdo será:
+                
+                ```php
+                <?php
+                    require "../../app_send_mail/processa_envio.php";
+                ?>
+                ```
+                
+        - Não será preciso se preocupar com os requires dentro do arquivo original, pois ele será pego no contexto certo já
